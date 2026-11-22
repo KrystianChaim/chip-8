@@ -9,12 +9,12 @@ public final class SamplePrograms {
 
     public static Map<String, byte[]> getBuiltInPrograms() {
         Map<String, byte[]> programs = new LinkedHashMap<>();
-        programs.put("Mini-Game: Catch the Star (Keys 4 / 6)", createCatchStarGameRom());
-        programs.put("Pixel Painter (2=Up, 8=Down, 4=L, 6=R, 0=Cls)", createPixelPainterRom());
-        programs.put("Keypad HEX Echo (Press Any Key 0-F)", createKeypadEchoRom());
-        programs.put("Bouncing Square (Animation)", createBouncingSquareRom());
-        programs.put("Fontset Showcase (HEX Digits)", createFontShowcaseRom());
-        programs.put("Arithmetic Loop (Sum 1..5 = 15)", createSumLoopRom());
+        programs.put("Catch the Star (Keys 4 / 6)", createCatchStarGameRom());
+        programs.put("Pixel Painter", createPixelPainterRom());
+        programs.put("Keypad HEX Echo", createKeypadEchoRom());
+        programs.put("Bouncing Square", createBouncingSquareRom());
+        programs.put("Fontset Showcase", createFontShowcaseRom());
+        programs.put("Arithmetic Loop", createSumLoopRom());
         return programs;
     }
 
