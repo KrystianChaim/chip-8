@@ -11,7 +11,7 @@ import java.awt.image.BufferStrategy;
 public class DisplayCanvas extends Canvas {
     private static final int SCALE = 12;
     private static final Color OFF_COLOR = new Color(18, 22, 26);
-    private static final Color ON_COLOR = new Color(224, 66, 140);
+    private static final Color ON_COLOR = new Color(80, 230, 140);
 
     private final Display display;
 

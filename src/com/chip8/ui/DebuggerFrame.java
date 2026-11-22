@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.KeyEventDispatcher;
@@ -54,7 +55,7 @@ public class DebuggerFrame extends JFrame implements Chip8Observer {
     private byte[] currentRom;
 
     public DebuggerFrame() {
-        super("CHIP-8 Virtual Machine & Debugger");
+        super("Virtual Machine CHIP-8");
         cpu.addObserver(this);
 
         executionTimer = new Timer(16, e -> executeFrameTick());
@@ -73,36 +74,36 @@ public class DebuggerFrame extends JFrame implements Chip8Observer {
 
     private void setupLayout() {
         setLayout(new BorderLayout(10, 10));
-        add(createLeftControlsPanel(), BorderLayout.WEST);
-        add(createCenterDisplayPanel(), BorderLayout.CENTER);
-        add(createRightInspectorPanel(), BorderLayout.EAST);
+        add(createTopDisplayPanel(), BorderLayout.NORTH);
+        add(createBottomWorkspacePanel(), BorderLayout.CENTER);
     }
 
-    private JPanel createLeftControlsPanel() {
-        JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
+    private JPanel createTopDisplayPanel() {
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
+        topPanel.add(displayCanvas);
+        return topPanel;
+    }
 
+    private JPanel createBottomWorkspacePanel() {
+        JPanel bottomPanel = new JPanel(new BorderLayout(10, 0));
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+        bottomPanel.add(createBottomLeftControlsPanel(), BorderLayout.WEST);
+        bottomPanel.add(createBottomRightInspectorPanel(), BorderLayout.CENTER);
+        return bottomPanel;
+    }
+
+    private JPanel createBottomLeftControlsPanel() {
         JPanel stackedPanels = new JPanel();
         stackedPanels.setLayout(new BoxLayout(stackedPanels, BoxLayout.Y_AXIS));
         stackedPanels.add(createProgramSelectionPanel());
-        stackedPanels.add(Box.createVerticalStrut(10));
+        stackedPanels.add(Box.createVerticalStrut(8));
         stackedPanels.add(createExecutionControlPanel());
-
-        wrapper.add(stackedPanels, BorderLayout.NORTH);
-        return wrapper;
+        return stackedPanels;
     }
 
-    private JPanel createCenterDisplayPanel() {
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        centerPanel.add(displayCanvas, BorderLayout.CENTER);
-        return centerPanel;
-    }
-
-    private JPanel createRightInspectorPanel() {
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
+    private JPanel createBottomRightInspectorPanel() {
+        JPanel rightPanel = new JPanel(new GridLayout(1, 2, 10, 0));
         rightPanel.add(createRegistersPanel());
         rightPanel.add(createKeypadPanel());
         return rightPanel;
@@ -132,7 +133,7 @@ public class DebuggerFrame extends JFrame implements Chip8Observer {
     }
 
     private JPanel createExecutionControlPanel() {
-        JPanel panel = new JPanel(new GridLayout(6, 1, 5, 5));
+        JPanel panel = new JPanel(new GridLayout(3, 2, 5, 5));
         panel.setBorder(BorderFactory.createTitledBorder("Execution & State"));
 
         JButton runBtn = new JButton("Run");
