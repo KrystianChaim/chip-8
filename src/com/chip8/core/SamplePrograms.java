@@ -9,7 +9,7 @@ public final class SamplePrograms {
 
     public static Map<String, byte[]> getBuiltInPrograms() {
         Map<String, byte[]> programs = new LinkedHashMap<>();
-        programs.put("Catch the Star (Keys 4 / 6)", createCatchStarGameRom());
+        programs.put("Catch the Star", createCatchStarGameRom());
         programs.put("Pixel Painter", createPixelPainterRom());
         programs.put("Keypad HEX Echo", createKeypadEchoRom());
         programs.put("Bouncing Square", createBouncingSquareRom());
