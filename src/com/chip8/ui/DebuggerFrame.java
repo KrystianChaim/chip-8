@@ -8,6 +8,7 @@ import com.chip8.core.Keypad;
 import com.chip8.core.Memory;
 import com.chip8.core.SamplePrograms;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -72,31 +73,45 @@ public class DebuggerFrame extends JFrame implements Chip8Observer {
 
     private void setupLayout() {
         setLayout(new BorderLayout(10, 10));
+        add(createLeftControlsPanel(), BorderLayout.WEST);
+        add(createCenterDisplayPanel(), BorderLayout.CENTER);
+        add(createRightInspectorPanel(), BorderLayout.EAST);
+    }
 
-        JPanel leftPanel = new JPanel(new BorderLayout(8, 8));
-        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
-        leftPanel.add(displayCanvas, BorderLayout.CENTER);
-        leftPanel.add(createControlsPanel(), BorderLayout.SOUTH);
+    private JPanel createLeftControlsPanel() {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
 
+        JPanel stackedPanels = new JPanel();
+        stackedPanels.setLayout(new BoxLayout(stackedPanels, BoxLayout.Y_AXIS));
+        stackedPanels.add(createProgramSelectionPanel());
+        stackedPanels.add(Box.createVerticalStrut(10));
+        stackedPanels.add(createExecutionControlPanel());
+
+        wrapper.add(stackedPanels, BorderLayout.NORTH);
+        return wrapper;
+    }
+
+    private JPanel createCenterDisplayPanel() {
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        centerPanel.add(displayCanvas, BorderLayout.CENTER);
+        return centerPanel;
+    }
+
+    private JPanel createRightInspectorPanel() {
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
         rightPanel.add(createRegistersPanel());
         rightPanel.add(createKeypadPanel());
-
-        add(leftPanel, BorderLayout.CENTER);
-        add(rightPanel, BorderLayout.EAST);
+        return rightPanel;
     }
 
-    private JPanel createControlsPanel() {
-        JPanel container = new JPanel(new GridLayout(2, 1, 5, 5));
-        container.add(createProgramSelectionRow());
-        container.add(createExecutionControlRow());
-        return container;
-    }
+    private JPanel createProgramSelectionPanel() {
+        JPanel panel = new JPanel(new GridLayout(3, 1, 5, 5));
+        panel.setBorder(BorderFactory.createTitledBorder("Program & ROM"));
 
-    private JPanel createProgramSelectionRow() {
-        JPanel row = new JPanel();
         JComboBox<String> selector = new JComboBox<>(samplePrograms.keySet().toArray(new String[0]));
 
         JButton loadBtn = new JButton("Load Sample");
@@ -110,15 +125,15 @@ public class DebuggerFrame extends JFrame implements Chip8Observer {
         JButton openBtn = new JButton("Open .ch8 File...");
         openBtn.addActionListener(e -> openExternalRomFile());
 
-        row.add(new JLabel("Program:"));
-        row.add(selector);
-        row.add(loadBtn);
-        row.add(openBtn);
-        return row;
+        panel.add(selector);
+        panel.add(loadBtn);
+        panel.add(openBtn);
+        return panel;
     }
 
-    private JPanel createExecutionControlRow() {
-        JPanel row = new JPanel();
+    private JPanel createExecutionControlPanel() {
+        JPanel panel = new JPanel(new GridLayout(6, 1, 5, 5));
+        panel.setBorder(BorderFactory.createTitledBorder("Execution & State"));
 
         JButton runBtn = new JButton("Run");
         runBtn.addActionListener(e -> {
@@ -156,13 +171,13 @@ public class DebuggerFrame extends JFrame implements Chip8Observer {
         JButton restoreBtn = new JButton("Restore Snapshot");
         restoreBtn.addActionListener(e -> restoreSavedSnapshot());
 
-        row.add(runBtn);
-        row.add(pauseBtn);
-        row.add(stepBtn);
-        row.add(resetBtn);
-        row.add(saveBtn);
-        row.add(restoreBtn);
-        return row;
+        panel.add(runBtn);
+        panel.add(pauseBtn);
+        panel.add(stepBtn);
+        panel.add(resetBtn);
+        panel.add(saveBtn);
+        panel.add(restoreBtn);
+        return panel;
     }
 
     private void restoreSavedSnapshot() {
